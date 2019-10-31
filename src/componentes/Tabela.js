@@ -15,22 +15,28 @@ const TableHead = () => {
 
 const TableBody = (props) => {
     const linhas = props.autores.map( (linha,index) => {
-        return <tr>
+        return <tr key={index}>
             <td>{linha.nome}</td>
             <td>{linha.livro}</td>
             <td>{linha.preco}</td>
-            <td><button>Remover</button></td>
+            <td><button onClick={() => {props.removeAutor(index)}}>Remover</button></td>
         </tr>
     })
+
+    return(
+        <tb>
+            {linhas}
+        </tb>
+    )
 }
 
 class Tabela extends React.Component{
     render(){
-        const {autores} = this.props;
+        const {autores, removeAutor} = this.props;
         return (
             <table>
                 <TableHead />
-                <TableBody autores = {autores}/>
+                <TableBody autores = {autores} removeAutor = {removeAutor}/>
             </table>
         )
     }

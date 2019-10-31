@@ -1,38 +1,50 @@
 import React from 'react';
-import './css/pure-min.css';
-import './css/side-menu.css';
-import {Link} from 'react-router-dom';
+import './App.css';
 
+import Tabela from './componentes/Tabela';
 
-class App extends React.Component{
+class App extends React.Component {
+  state = {
+    autores: [
+      {
+        nome: 'Paulo',
+        livro: 'React',
+        preco: '1000'
+      },
+      {
+        nome: 'Daniel',
+        livro: 'Java',
+        preco: '99'
+      },
+      {
+        nome: 'Marcos',
+        livro: 'Design',
+        preco: '150'
+      },
+      {
+        nome: 'Bruno',
+        livro: 'DevOps',
+        preco: '100'
+      }
+    ]
+  }
+
+  removeAutor(index){
+    this.setState(
+      {
+        autores: autores.filter((autor, posAtual) => {
+          return posAtual !== index;
+        })
+      }
+    )
+  }
 
   render(){
-      return(
-    <div id="layout">
-    
-    <a href="#menu" id="menuLink" className="menu-link">
-        
-        <span></span>
-    </a>
-
-    <div id="menu">
-        <div className="pure-menu">
-            <a className="pure-menu-heading" href="#">Livraria</a>
-
-            <ul className="pure-menu-list">
-                <li className="pure-menu-item"><Link to="/" className="pure-menu-link">Home</Link></li>
-                <li className="pure-menu-item"><Link to="/autor" className="pure-menu-link">Autor</Link></li>
-                <li className="pure-menu-item"><Link to="/livro" className="pure-menu-link">Livros</Link></li>
-            </ul>
-        </div>
-    </div>
-
-    <div id="main">
-           {this.props.children}>
-    </div>         
-</div>
-  );
-}
+    return (
+      <div className="App">
+        <Tabela autores= {this.state.autores} removeAutor={this.removeAutor}/>
+      </div>
+    );}
 }
 
 export default App;
