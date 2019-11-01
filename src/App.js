@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 
 import Tabela from './componentes/Tabela';
+import Formulario from './componentes/Formulario'
 
 class App extends React.Component {
   state = {
@@ -29,7 +30,8 @@ class App extends React.Component {
     ]
   }
 
-  removeAutor(index){
+  removeAutor = (index) => {
+    const {autores} = this.state;
     this.setState(
       {
         autores: autores.filter((autor, posAtual) => {
@@ -39,9 +41,14 @@ class App extends React.Component {
     )
   }
 
+  enviaForm = autor => {
+    this.setState({autores:[...this.state.autores, autor]})
+  }
+
   render(){
     return (
       <div className="App">
+        <Formulario enviaForm= {this.enviaForm}/>
         <Tabela autores= {this.state.autores} removeAutor={this.removeAutor}/>
       </div>
     );}
