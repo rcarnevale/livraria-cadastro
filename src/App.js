@@ -1,6 +1,8 @@
 import React from 'react';
-import './App.css';
+import './css/App.css';
+import './css/materialize.min.css';
 
+import Header from './componentes/Header'
 import Tabela from './componentes/Tabela';
 import Formulario from './componentes/Formulario'
 
@@ -48,8 +50,11 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
-        <Formulario enviaForm= {this.enviaForm}/>
-        <Tabela autores= {this.state.autores} removeAutor={this.removeAutor}/>
+        <Header />
+        <div className="mb-10">
+          <Formulario enviaForm= {this.enviaForm}/>
+          <Tabela autores= {this.state.autores} removeAutor={this.removeAutor}/>
+        </div>
       </div>
     );}
 }
