@@ -1,14 +1,40 @@
 import React from 'react';
+import FormValidator from './Validator';
+import PopUp from './PopUp'
 
 class Formulario extends React.Component{
     
     constructor(props){
         super(props);
+        
+        this.validator = new FormValidator([
+            {
+                campo:"nome",
+                metodo:"isEmpty",
+                validoQuando: false,
+                mensagem: "Entre com um nome"
+            },{
+                campo:"livro",
+                metodo:"isEmpty",
+                validoQuando: false,
+                mensagem: "Entre com um livro"
+            },{
+                campo:"preco",
+                metodo:"isInt",
+                args: [{min:0, max: 99999}],
+                validoQuando: true,
+                mensagem: "Entre com um valor numerico"
+            }
+        ]);
+        
         this.stateInicial ={
             nome:'',
             livro:'',
-            preco:''
+            preco:'',
+            validacao: this.validator.valido()
         }
+
+        
 
         this.state = this.stateInicial;
     }
@@ -22,8 +48,23 @@ class Formulario extends React.Component{
     }
 
     submitForm = () => {
-        this.props.enviaForm(this.state);
-        this.setState(this.stateInicial);
+
+        const validacao = this.validator.valida(this.state)
+        if(validacao.isValid){
+            this.props.enviaForm(this.state);
+            this.setState(this.stateInicial);
+        }else{
+            const {nome, livro, preco} = validacao;
+            const campos = [nome, livro, preco];
+
+            const camposInvalidos= campos.filter(elemento => {
+                return elemento.isInvalid;
+            })
+            
+            camposInvalidos.forEach(campo => {
+                PopUp.exibeMensagem('error', campo.message);
+            });
+        }
     }
 
     render(){
@@ -34,8 +75,9 @@ class Formulario extends React.Component{
             <form>
                 <div className="row">
                     <div className="input-field col s4">
-                        <label htmlFor="nome">Nome</label>
+                        <label htmlFor="nome"></label>
                         <input
+                            placeholder="Nome"
                             id="nome"
                             type="text"
                             name="nome"
@@ -44,8 +86,9 @@ class Formulario extends React.Component{
                         />
                     </div>
                     <div className="input-field col s4">
-                        <label htmlFor="livro">Livro</label>
+                        <label htmlFor="livro"></label>
                         <input
+                            placeholder="Livro"
                             id="livro"
                             type="text"
                             name="livro"
@@ -54,8 +97,9 @@ class Formulario extends React.Component{
                         />
                     </div>
                     <div className="input-field col s4">
-                        <label htmlFor="preco">Preço</label>
+                        <label htmlFor="preco"></label>
                         <input
+                            placeholder="Preço"
                             id="preco"
                             type="text"
                             name="preco"

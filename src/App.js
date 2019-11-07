@@ -4,7 +4,8 @@ import './css/materialize.min.css';
 
 import Header from './componentes/Header'
 import Tabela from './componentes/Tabela';
-import Formulario from './componentes/Formulario'
+import Formulario from './componentes/Formulario';
+import PopUp from './componentes/PopUp';
 
 class App extends React.Component {
   state = {
@@ -44,7 +45,8 @@ class App extends React.Component {
   }
 
   enviaForm = autor => {
-    this.setState({autores:[...this.state.autores, autor]})
+    this.setState({autores:[...this.state.autores, autor]});
+    PopUp.exibeMensagem('success', "Autor adicionado com sucesso!")
   }
 
   render(){
