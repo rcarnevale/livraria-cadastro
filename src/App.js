@@ -54,11 +54,13 @@ class App extends React.Component {
       <div className="App">
         <Header />
         <div className="mb-10">
+          <h1>Sistema de Cadastro</h1>
           <Formulario enviaForm= {this.enviaForm}/>
           <Tabela autores= {this.state.autores} removeAutor={this.removeAutor}/>
         </div>
       </div>
     );}
 }
+
 
 export default App;
