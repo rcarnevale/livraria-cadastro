@@ -20,31 +20,42 @@ class App extends React.Component {
 
   removeAutor = id => {
     const {autores} = this.state;
-    this.setState(
-      {
-        autores: autores.filter((autor) => {
-          return autor.id !== id;
-        })
-      }
-    )
-    PopUp.exibeMensagem("error", "Autor removido com sucesso!");
-    ApiService.removeAutor(id);
+    const atualizaAutor = autores.filter(autor => {
+      return autor.id !== id;
+    })
+    
+    ApiService.removeAutor(id)
+              .then(res => ApiService.trataErro(res))
+              .then(res => {
+                if(res.message === 'deleted'){
+                  this.setState({autores: [...atualizaAutor]});
+                  PopUp.exibeMensagem("error", "Autor removido com sucesso!");
+                }
+              })
+              .catch(err => PopUp.exibeMensagem("error", "Erro em comunicação com API ao remover autor."))
+    
   }
 
   enviaForm = autor => {
     ApiService.criaAutor(JSON.stringify(autor))
-              .then(res => res.data)
-              .then(autor => {
-                this.setState({autores:[...this.state.autores, autor]});
-                PopUp.exibeMensagem('success', "Autor adicionado com sucesso!")
+              .then(res => ApiService.trataErro(res))
+              .then(res => {
+                if(res.message === 'success'){
+                  this.setState({autores:[...this.state.autores, autor]});
+                  PopUp.exibeMensagem('success', "Autor adicionado com sucesso!")}
               })
+              .catch(err => PopUp.exibeMensagem("error", "Erro em comunicação com API ao adicionar autor."))
+              
   }
 
   componentDidMount(){
     ApiService.listaAutores()
-                .then(res => {
-                  this.setState({autores: [...this.state.autores, ...res.data]})
-                });
+              .then(res => ApiService.trataErro(res))
+              .then(res => {
+                if(res.message === 'success'){
+                  this.setState({autores: [...this.state.autores, ...res.data]})}
+              })
+              .catch(err => PopUp.exibeMensagem("error", "Erro em comunicação com API ao tentar carregar a listagem."))
   }
   render(){ 
     
