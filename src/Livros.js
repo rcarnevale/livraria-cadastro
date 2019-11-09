@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './componentes/Header';
 import DataTable from './componentes/DataTable';
+import ApiService from './componentes/ApiService';
 
 class Livros extends React.Component {
 
@@ -8,36 +9,17 @@ class Livros extends React.Component {
         super(props);
 
         this.state = {
-            autores: [
-                {
-                  nome: 'Paulo',
-                  livro: 'React',
-                  preco: '1000'
-                },
-                {
-                  nome: 'Daniel',
-                  livro: 'Java',
-                  preco: '99'
-                },
-                {
-                  nome: 'Marcos',
-                  livro: 'Design',
-                  preco: '150'
-                },
-                {
-                  nome: 'Bruno',
-                  livro: 'DevOps',
-                  preco: '100'
-                },
-                {
-                  nome: 'Nico',
-                  livro: 'Java',
-                  preco: '9999'
-                }
-              ],
-              titulo: 'Livros'
+            livros: [],
+            titulo: 'Livros'
         };
 
+    }
+
+    componentDidMount(){
+      ApiService.listaLivros()
+        .then(res => {
+          this.setState({livros: [...this.state.livros, ...res.data]});
+        })
     }
 
     render(){
@@ -46,7 +28,7 @@ class Livros extends React.Component {
             <div className="livros">
                 <Header />
                 <div className="mb-10">
-                    <DataTable dados = {this.state.autores} titulo = {this.state.titulo} colunas = {["livro"]} />
+                    <DataTable dados = {this.state.livros} titulo = {this.state.titulo} colunas = {["livro"]} />
                 </div>
             </div>
         )
